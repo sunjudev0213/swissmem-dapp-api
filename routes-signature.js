@@ -25,7 +25,9 @@ module.exports = server => {
         if (!req.body || !req.body.signature) {
             return res.send(401, "signature missing");
         }
-
+        if (!req.body || !req.body.message) {
+            return res.send(401, "message missing");
+        }
         Promise.all([
             models.signature.findOne({
                 where: { address: req.body.address }
@@ -36,6 +38,7 @@ module.exports = server => {
                     .findOrCreate({
                         where: { address: req.body.address },
                         defaults: {
+                            message: req.body.message,
                             address: req.body.address,
                             signature: req.body.signature,
                         }
