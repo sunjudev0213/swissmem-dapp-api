@@ -1,0 +1,29 @@
+{
+  "name": "relai-pwa-api",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node node_modules/@bity/mock-server-xchg-api/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@bity/api": "^1.0.3",
+    "@bity/mock-server-xchg-api": "0.0.1",
+    "axios": "^0.19.0",
+    "chalk": "^2.4.2",
+    "cookie": "^0.4.0",
+    "ejs": "^2.6.2",
+    "fs": "0.0.1-security",
+    "mailgun-js": "^0.22.0",
+    "node-fetch": "^2.6.0",
+    "path": "^0.12.7",
+    "printf": "^0.5.1",
+    "restify": "^8.3.3",
+    "restify-cors-middleware": "^1.1.1",
+    "restify-json-filtering": "^1.0.0",
+    "sequelize": "^5.10.1",
+    "sha3": "^2.0.6",
+    "sqlite3": "^4.0.9"
+  }
+}
