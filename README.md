@@ -5,7 +5,9 @@ Simple API server to capture signatures - and verify if signatures have been sub
 # Install
 
 `npm i`
+
 `npm i sqlite3`
+
 `node index.js`
 
 
