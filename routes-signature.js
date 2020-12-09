@@ -1,6 +1,7 @@
 const Accounts = require('web3-eth-accounts');
 const models = require('./models');
 const { getTermsAndConditionText } = require('./termsAndCondition');
+const sendMail = require('./mail/dappMailer');
 
 const accounts = new Accounts();
 
@@ -36,7 +37,8 @@ module.exports = (server) => {
       return req.send(401, 'Incorrect request format');
     }
 
-    const { signature, message, address } = body;
+    const { signature, message } = body;
+    const address = body.address && body.address.toLowerCase();
     if (!address) {
       return res.send(401, 'address missing');
     }
@@ -54,7 +56,7 @@ module.exports = (server) => {
     }
 
     const publicAddress = accounts.recover(message, signature);
-    if (publicAddress.toLowerCase() !== address.toLowerCase()) {
+    if (publicAddress.toLowerCase() !== address) {
       return res.send(401, 'message is not signed by claimed wallet address');
     }
 
@@ -64,13 +66,14 @@ module.exports = (server) => {
 
     if (!result || result.length === 0) {
       await models.signature.findOrCreate({
-        where: { address: address.toLowerCase() },
+        where: { address },
         defaults: {
           message,
-          address: address.toLowerCase(),
+          address,
           signature,
         },
       });
+      sendMail(address, signature);
       return res.send(200);
     }
 
