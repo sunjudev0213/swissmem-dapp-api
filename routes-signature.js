@@ -1,12 +1,13 @@
 const Accounts = require('web3-eth-accounts');
 const models = require('./models');
 const { getTermsAndConditionText } = require('./termsAndCondition');
+const sendMail = require('./mail/dappMailer');
+const whitelistService = require('./service/whitelist');
 
 const accounts = new Accounts();
 
 module.exports = (server) => {
-  // eslint-disable-next-line no-unused-vars
-  server.get('/signature/:address', (req, res, next) => {
+  server.get('/signature/:address', (req, res) => {
     const { address } = req.params;
     console.log(`Get signature for ${address}`);
 
@@ -28,6 +29,19 @@ module.exports = (server) => {
       });
   });
 
+  server.get('/whitelist/:address', (req, res) => {
+    const { address } = req.params;
+
+    console.log(`Get user is white listed for ${address}`);
+
+    whitelistService(address)
+      .then((r) => {
+        console.log('response:', r);
+        return res.send(200, { whitelisted: r });
+      })
+      .catch((e) => res.send(500, e));
+  });
+
   // eslint-disable-next-line no-unused-vars
   server.post('/signature', async (req, res, next) => {
     const { body } = req;
@@ -36,7 +50,8 @@ module.exports = (server) => {
       return req.send(401, 'Incorrect request format');
     }
 
-    const { signature, message, address } = body;
+    const { signature, message } = body;
+    const address = body.address && body.address.toLowerCase();
     if (!address) {
       return res.send(401, 'address missing');
     }
@@ -54,7 +69,7 @@ module.exports = (server) => {
     }
 
     const publicAddress = accounts.recover(message, signature);
-    if (publicAddress.toLowerCase() !== address.toLowerCase()) {
+    if (publicAddress.toLowerCase() !== address) {
       return res.send(401, 'message is not signed by claimed wallet address');
     }
 
@@ -64,13 +79,14 @@ module.exports = (server) => {
 
     if (!result || result.length === 0) {
       await models.signature.findOrCreate({
-        where: { address: address.toLowerCase() },
+        where: { address },
         defaults: {
           message,
-          address: address.toLowerCase(),
+          address,
           signature,
         },
       });
+      sendMail(address, signature);
       return res.send(200);
     }
 
