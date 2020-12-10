@@ -2,12 +2,12 @@ const Accounts = require('web3-eth-accounts');
 const models = require('./models');
 const { getTermsAndConditionText } = require('./termsAndCondition');
 const sendMail = require('./mail/dappMailer');
+const whitelistService = require('./service/whitelist');
 
 const accounts = new Accounts();
 
 module.exports = (server) => {
-  // eslint-disable-next-line no-unused-vars
-  server.get('/signature/:address', (req, res, next) => {
+  server.get('/signature/:address', (req, res) => {
     const { address } = req.params;
     console.log(`Get signature for ${address}`);
 
@@ -27,6 +27,19 @@ module.exports = (server) => {
       .catch((e) => {
         return res.send(404);
       });
+  });
+
+  server.get('/whitelist/:address', (req, res) => {
+    const { address } = req.params;
+
+    console.log(`Get user is white listed for ${address}`);
+
+    whitelistService(address)
+      .then((r) => {
+        console.log('response:', r);
+        return res.send(200, { whitelisted: r });
+      })
+      .catch((e) => res.send(500, e));
   });
 
   // eslint-disable-next-line no-unused-vars
