@@ -1,19 +1,19 @@
 const Accounts = require('web3-eth-accounts');
 const models = require('./models');
 const { getTermsAndConditionText } = require('./termsAndCondition');
+const { getStatutesText } = require('./statutes');
 const sendMail = require('./mail/dappMailer');
 const whitelistService = require('./service/whitelist');
 
 const accounts = new Accounts();
 
 module.exports = (server) => {
-  server.get('/signature/:address', (req, res) => {
-    const { address } = req.params;
-    console.log(`Get signature for ${address}`);
+  server.get('/signature/:key', (req, res) => {
+    const { key } = req.params;
 
     models.signature
       .findOne({
-        where: { address: address.toLowerCase() },
+        where: { key: key.toLowerCase() },
       })
       .then((instance) => {
         return res.send(
@@ -50,7 +50,7 @@ module.exports = (server) => {
       return req.send(401, 'Incorrect request format');
     }
 
-    const { signature, message } = body;
+    const { signature, message, type } = body;
     const address = body.address && body.address.toLowerCase();
     if (!address) {
       return res.send(401, 'address missing');
@@ -61,32 +61,52 @@ module.exports = (server) => {
     if (!message) {
       return res.send(401, 'message missing');
     }
+    if (!type) {
+      return res.send(401, 'type missing');
+    }
 
     const termsAndCondition = await getTermsAndConditionText();
+    const statutes = await getStatutesText();
 
-    if (termsAndCondition !== message) {
-      return res.send(401, "message doesn't match with terms and condition");
+    switch (type) {
+      case 'tandc':
+        if (termsAndCondition !== message) {
+          return res.send(401, "message doesn't match with terms and condition");
+        }
+        if (accounts.recover(message, signature).toLowerCase() !== address) {
+          return res.send(401, 'message is not signed by claimed wallet address');
+        }
+        break;
+      case 'statutes':
+        if (statutes !== message) {
+          return res.send(401, `message doesn't match with statutes ${statutes} !== ${message})`);
+        }
+        if (accounts.recover(message, signature).toLowerCase() !== address) {
+          return res.send(401, 'message is not signed by claimed wallet address');
+        }
+        break;
+      default:
+        return res.send(401, 'unknown signature type');
     }
 
-    const publicAddress = accounts.recover(message, signature);
-    if (publicAddress.toLowerCase() !== address) {
-      return res.send(401, 'message is not signed by claimed wallet address');
-    }
+
+    const key = `${address}_${type}`;
 
     const result = await models.signature.findOne({
-      where: { address },
+      where: { key },
     });
 
     if (!result || result.length === 0) {
       await models.signature.findOrCreate({
-        where: { address },
+        where: { key },
         defaults: {
           message,
           address,
+          key,
           signature,
         },
       });
-      sendMail(address, signature);
+      sendMail(key, signature);
       return res.send(200);
     }
 

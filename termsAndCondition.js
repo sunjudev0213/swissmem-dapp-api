@@ -6,7 +6,7 @@ const getTermsAndConditionText = async () => {
   if (!termAndConditions) {
     const hash = config.termsAndConditionsHash;
     if (!hash) {
-      console.error('Terms and Condition IFPS hash value is not defined!');
+      //   console.error('Terms and Condition IFPS hash value is not defined!');
       return undefined;
     }
 
