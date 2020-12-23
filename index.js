@@ -8,7 +8,7 @@ const cors = corsMiddleware({
     preflightMaxAge: 5, //Optional
     origins: [
         /^http:\/\/localhost(:[\d]+)?$/,
-        "https://*.netlify.com",
+        "https://*.netlify.app",
         // "https://myapp.com"   // Add endpoint here...
     ],
     allowHeaders: ["sessionid"]
