@@ -9,6 +9,7 @@ const cors = corsMiddleware({
     origins: [
         /^http:\/\/localhost(:[\d]+)?$/,
         "https://*.netlify.app",
+        "https://member.commonsstack.foundation",
         // "https://myapp.com"   // Add endpoint here...
     ],
     allowHeaders: ["sessionid"]
