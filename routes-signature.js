@@ -32,11 +32,11 @@ module.exports = (server) => {
   server.get('/whitelist/:address', (req, res) => {
     const { address } = req.params;
 
-    console.log(`Get user is white listed for ${address}`);
+    // console.log(`Get user is white listed for ${address}`);
 
     whitelistService(address)
       .then((r) => {
-        console.log('response:', r);
+        // console.log('response:', r);
         return res.send(200, { whitelisted: r });
       })
       .catch((e) => res.send(500, e));
@@ -88,7 +88,6 @@ module.exports = (server) => {
       default:
         return res.send(401, 'unknown signature type');
     }
-
 
     const key = `${address}_${type}`;
 
