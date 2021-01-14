@@ -3,7 +3,7 @@ const models = require('./models');
 const { getTermsAndConditionText } = require('./termsAndCondition');
 const { getStatutesText } = require('./statutes');
 const sendMail = require('./mail/dappMailer');
-const whitelistService = require('./service/whitelist');
+const { isUserWhiteListed, getMaxTrust } = require('./service/whitelist');
 
 const accounts = new Accounts();
 
@@ -34,13 +34,28 @@ module.exports = (server) => {
 
     // console.log(`Get user is white listed for ${address}`);
 
-    whitelistService(address)
+    isUserWhiteListed(address)
       .then((r) => {
         // console.log('response:', r);
         return res.send(200, { whitelisted: r });
       })
       .catch((e) => res.send(500, e));
   });
+
+
+  server.get('/maxtrust/:address', (req, res) => {
+    const { address } = req.params;
+
+    // console.log(`Get user is white listed for ${address}`);
+
+    getMaxTrust(address)
+      .then((r) => {
+        // console.log('response:', r);
+        return res.send(200, { maxtrust: r });
+      })
+      .catch((e) => res.send(500, e));
+  });
+
 
   // eslint-disable-next-line no-unused-vars
   server.post('/signature', async (req, res, next) => {

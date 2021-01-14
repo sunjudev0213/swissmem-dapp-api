@@ -22,5 +22,11 @@ setInterval(() => {
 const isUserWhiteListed = async (userAddress = '') => {
   return contributorsCache.has(userAddress.toLowerCase());
 };
+const getMaxTrust = async (userAddress) => {
+  return registry.getMaxTrust(userAddress);
+};
 
-module.exports = isUserWhiteListed;
+module.exports = {
+  isUserWhiteListed,
+  getMaxTrust,
+}

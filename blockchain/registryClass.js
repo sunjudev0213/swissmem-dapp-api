@@ -17,6 +17,20 @@ class RegistryClass {
 
     return contributors;
   }
+
+  async getMaxTrust(address) {
+    const contract = new this.web3.eth.Contract(abi, this.address);
+    const contributors = await new Promise((resolve, reject) => {
+      contract.methods.getMaxTrust(address).call((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
+
+    return contributors;
+  }
+
+
 }
 
 module.exports = RegistryClass;
