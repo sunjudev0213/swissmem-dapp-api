@@ -5,14 +5,14 @@ const printf = require('printf');
 const models = require('./models');
 
 const cors = corsMiddleware({
-    preflightMaxAge: 5, //Optional
-    origins: [
-        /^http:\/\/localhost(:[\d]+)?$/,
-        "https://*.netlify.app",
-        "https://member.commonsstack.foundation",
-        // "https://myapp.com"   // Add endpoint here...
-    ],
-    allowHeaders: ["sessionid"]
+  preflightMaxAge: 5, // Optional
+  origins: [
+    /^http:\/\/localhost(:[\d]+)?$/,
+    'https://*.netlify.app',
+    'https://member.commonsstack.foundation',
+    // "https://myapp.com"   // Add endpoint here...
+  ],
+  allowHeaders: ['sessionid'],
 });
 
 const server = restify.createServer({
@@ -29,6 +29,7 @@ server.use(cors.actual);
 
 // attach routes
 require('./routes-signature')(server);
+require('./routes-balance')(server);
 
 // eslint-disable-next-line no-unused-vars
 server.get('/ping', function (req, res, next) {

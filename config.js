@@ -6,6 +6,9 @@ const configs = {
     mailTo: 'amin@giveth.io',
     rpcEndpointXdai: 'https://rpc.xdaichain.com/',
     RegistryAddress: '0x73e7427428f6C77C180d17F48909780c839954a7',
+    MinterAddress: '0x7b2708986699565c87C9832Efa12bC6DBDC141d7',
+    minterDeployedBlock: 1000,
+    requiredConfirmationXdai: 1,
   },
 
   production: {

@@ -1,8 +1,14 @@
 const db = require('../db.js').sequelize;
 const signature = require('./signature');
+const balance = require('./balance');
+const blockNumber = require('./blockNumber');
+const donate = require('./donate');
 
 const models = {
   signature,
+  balance,
+  blockNumber,
+  donate,
 };
 
 const init = () => {
