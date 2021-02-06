@@ -1,7 +1,7 @@
 const configs = {
   dev: {
     environment: 'development',
-    termsAndConditionsHash: 'QmcvtzZhJMzQuvQEXTDeqyXorkMJntZq5uiHnJDghdUA83',
+    termsAndConditionsHash: 'QmYDmtmDYUPR6wjukzaNytibeNnYs41s2co4tNzkUYdd5n',
     statutesHash: 'QmcGNi9dcVgLJGtxJzjU2CyrrmVKkLnNPEK8JJC2a98zC5',
     mailTo: 'amin@giveth.io',
     rpcEndpointXdai: 'https://rpc.xdaichain.com/',
