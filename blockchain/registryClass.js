@@ -2,35 +2,26 @@ const { abi } = require('./contracts/registry.json');
 
 class RegistryClass {
   constructor(web3, address) {
-    this.web3 = web3;
-    this.address = address;
+    this.contract = new web3.eth.Contract(abi, address);
   }
 
   async getContributors() {
-    const contract = new this.web3.eth.Contract(abi, this.address);
-    const contributors = await new Promise((resolve, reject) => {
-      contract.methods.getContributors().call((err, res) => {
+    return new Promise((resolve, reject) => {
+      this.contract.methods.getContributors().call((err, res) => {
         if (err) reject(err);
         resolve(res);
       });
     });
-
-    return contributors;
   }
 
   async getMaxTrust(address) {
-    const contract = new this.web3.eth.Contract(abi, this.address);
-    const contributors = await new Promise((resolve, reject) => {
-      contract.methods.getMaxTrust(address).call((err, res) => {
+    return new Promise((resolve, reject) => {
+      this.contract.methods.getMaxTrust(address).call((err, res) => {
         if (err) reject(err);
         resolve(res);
       });
     });
-
-    return contributors;
   }
-
-
 }
 
 module.exports = RegistryClass;

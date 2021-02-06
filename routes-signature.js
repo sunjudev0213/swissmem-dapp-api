@@ -42,7 +42,6 @@ module.exports = (server) => {
       .catch((e) => res.send(500, e));
   });
 
-
   server.get('/maxtrust/:address', (req, res) => {
     const { address } = req.params;
 
@@ -55,7 +54,6 @@ module.exports = (server) => {
       })
       .catch((e) => res.send(500, e));
   });
-
 
   // eslint-disable-next-line no-unused-vars
   server.post('/signature', async (req, res, next) => {
