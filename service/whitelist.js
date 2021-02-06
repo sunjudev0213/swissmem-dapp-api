@@ -29,4 +29,4 @@ const getMaxTrust = async (userAddress) => {
 module.exports = {
   isUserWhiteListed,
   getMaxTrust,
-}
+};
