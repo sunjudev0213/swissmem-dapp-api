@@ -1,0 +1,18 @@
+{
+  "development": [
+    {
+      "address": "0xf23ea0b5f14afcbe532a1df273f7b233ebe41c78",
+      "balance": "450000000000000000000"
+    }
+  ],
+  "production": [
+    {
+      "address": "0x839395e20bbb182fa440d08f850e6c7a8f6f0780",
+      "balance": "450000000000000000000"
+    },
+    {
+      "address": "0x5b7575494b1e28974efe6ea71ec569b34958f72e",
+      "balance": "450000000000000000000"
+    }
+  ]
+}

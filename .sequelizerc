@@ -1,0 +1,12 @@
+// .sequelizerc
+
+require("babel-register");
+
+const path = require('path');
+
+module.exports = {
+    'config': path.resolve('migration', 'config.json'),
+    'models-path': path.resolve('models'),
+    'seeders-path': path.resolve('migration', 'seeds'),
+    'migrations-path': path.resolve('migration', 'migrations')
+}
