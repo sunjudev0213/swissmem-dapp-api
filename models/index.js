@@ -12,6 +12,10 @@ const models = {
 };
 
 const init = () => {
+/*  models['balance'].destroy({ truncate: true });
+  models['blockNumber'].destroy({ truncate: true });
+  models['donate'].destroy({ truncate: true });
+*/
   return Promise.all([
     Object.keys(models).map((key) => {
       console.log('model', key, typeof models[key]);

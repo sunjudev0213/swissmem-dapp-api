@@ -10,6 +10,7 @@ module.exports = (server) => {
       })
       // eslint-disable-next-line no-unused-vars
       .catch((e) => {
+	console.log(e);
         return res.send(404);
       });
   });
