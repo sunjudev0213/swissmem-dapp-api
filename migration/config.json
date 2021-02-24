@@ -1,0 +1,12 @@
+{
+  "development": {
+    "dialect": "sqlite",
+    "storage": "./data/reststore",
+    "logging": false
+  },
+  "production": {
+    "dialect": "sqlite",
+    "storage": "./data/reststore",
+    "logging": false
+  }
+}
