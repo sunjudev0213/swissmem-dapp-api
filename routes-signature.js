@@ -59,6 +59,8 @@ module.exports = (server) => {
   server.post('/signature', async (req, res, next) => {
     const { body } = req;
 
+    console.log("receiving signature",body);
+
     if (!body) {
       return req.send(401, 'Incorrect request format');
     }
@@ -81,6 +83,8 @@ module.exports = (server) => {
     const termsAndCondition = await getTermsAndConditionText();
     const statutes = await getStatutesText();
 
+    console.log("checking signature text");
+
     switch (type) {
       case 'tandc':
         if (termsAndCondition !== message) {
@@ -102,13 +106,18 @@ module.exports = (server) => {
         return res.send(401, 'unknown signature type');
     }
 
+    console.log("text OK");
+
     const key = `${address}_${type}`;
+
+    console.log(`finding signature with key ${key}`);
 
     const result = await models.signature.findOne({
       where: { key },
     });
 
     if (!result || result.length === 0) {
+	console.log(`sig not found - adding it`);
       await models.signature.findOrCreate({
         where: { key },
         defaults: {
@@ -118,10 +127,12 @@ module.exports = (server) => {
           signature,
         },
       });
+      console.log(`sending mail`);
       sendMail(key, signature);
+      console.log(`OK finished`);
       return res.send(200);
     }
-
+    console.log(`already present (signature)`);
     return res.send(401, 'Signature already exists');
   });
 };
